@@ -23,6 +23,9 @@ const html2bbcode = function (s) {
   rep(/<span style=\"color: ?(.*?);\">(.*?)<\/span>/gi, '[color=$1]$2[/color]');
   rep(/<font.*?color=\"(.*?)\".*?>(.*?)<\/font>/gi, '[color=$1]$2[/color]');
   rep(/<span style=\"font-size:(.*?);\">(.*?)<\/span>/gi, '[size=$1]$2[/size]');
+  rep(/<ul>(.*?)<\/ol>/gi, '[ul]$1[/ul]');
+  rep(/<ol>(.*?)<\/ol>/gi, '[ol]$1[/ol]');
+  rep(/<li>(.*?)<\/li>/gi, '[li]$1[/li]');
   rep(/<font>(.*?)<\/font>/gi, '$1');
   rep(/<img.*?src=\"(.*?)\".*?\/>/gi, '[img]$1[/img]');
   rep(/<span class=\"codeStyle\">(.*?)<\/span>/gi, '[code]$1[/code]');
@@ -42,11 +45,14 @@ const html2bbcode = function (s) {
   rep(/<u>/gi, '[u]');
   rep(/<blockquote[^>]*>/gi, '[quote]');
   rep(/<\/blockquote>/gi, '[/quote]');
-  rep(/<br \/>/gi, '\n');
-  rep(/<br\/>/gi, '\n');
-  rep(/<br>/gi, '\n');
-  rep(/<p>/gi, '');
-  rep(/<\/p>/gi, '\n');
+  rep(/<br \/>/gi, '[br/]');
+  rep(/<br\/>/gi, '[br/]');
+  rep(/<br>/gi, '[br/]');
+  rep(/<hr \/>/gi, '[hr/]');
+  rep(/<hr\/>/gi, '[hr/]');
+  rep(/<hr>/gi, '[hr/]');
+  rep(/<p>/gi, '[p]');
+  rep(/<\/p>/gi, '[/p]');
   rep(/&nbsp;|\u00a0/gi, ' ');
   rep(/&quot;/gi, '"');
   rep(/&lt;/gi, '<');
@@ -64,13 +70,23 @@ const bbcode2html = function (s) {
   };
 
   // example: [b] to <strong>
-  rep(/\n/gi, '<br />');
+  rep(/\n/gi, '');
+  rep(/\[br\/\]/gi, '<br/>');
+  rep(/\[hr\/\]/gi, '<hr/>');
+  rep(/\[p\]/gi, '<p>');
+  rep(/\[\/p\]/gi, '</p>');
   rep(/\[b\]/gi, '<strong>');
   rep(/\[\/b\]/gi, '</strong>');
   rep(/\[i\]/gi, '<em>');
   rep(/\[\/i\]/gi, '</em>');
   rep(/\[u\]/gi, '<u>');
   rep(/\[\/u\]/gi, '</u>');
+  rep(/\[ul\]/gi, '<ul>');
+  rep(/\[\/ul\]/gi, '</ul>');
+  rep(/\[ol\]/gi, '<ol>');
+  rep(/\[\/ol\]/gi, '</ol>');
+  rep(/\[li\]/gi, '<li>');
+  rep(/\[\/li\]/gi, '</li>');
   rep(/\[url=([^\]]+)\](.*?)\[\/url\]/gi, '<a href="$1">$2</a>');
   rep(/\[url\](.*?)\[\/url\]/gi, '<a href="$1">$1</a>');
   rep(/\[img\](.*?)\[\/img\]/gi, '<img src="$1" />');
